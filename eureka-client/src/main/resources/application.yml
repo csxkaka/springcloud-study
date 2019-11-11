@@ -1,9 +1,9 @@
 server:
-  port: 8092
+  port: 8091
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8090/eureka/  #¿Í»§¶ËÕâÀï±ØĞëÊÇÍÕ·åÃüÃû
+      defaultZone: http://localhost:8090/eureka/ #æŒ‡å‘æœåŠ¡æ³¨å†Œä¸­å¿ƒ
 spring:
   application:
-    name: eureka-client  #Æğ¸öÃû×Ö£¬ÓÃÓÚ×¢²áµ½·şÎñ¶Ë
+    name: eureka-client #ç»™å®ä¾‹å–ä¸€ä¸ªåå­—

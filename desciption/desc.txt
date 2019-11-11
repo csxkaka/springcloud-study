@@ -1,0 +1,104 @@
+一、关于在IDEA中创建主项目和子模块：
+   1、主项目是一个普通的maven项目
+     File-New-Project-Maven-Next...
+     创建完后可以将src目录删除，保留pom.xml文件
+   2、创建eureka-server模块
+     File-New-Module-Spring Initializr-Next-Next-Spring Cloud Discovery-勾选Eureka Server
+   3、创建eureka-client模块
+     和创建eureka-server一样，把最后一步改为勾选Eureka Discovery Client即可
+
+   这时候在主项目中手动添加如下：
+   <parent>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-parent</artifactId>
+       <version>2.0.3.RELEASE</version>
+   </parent>
+   并将两个子模块的<parent></parent>改为：
+   <parent>
+       <groupId>com.csxkaka</groupId>
+       <artifactId>springcloud-study</artifactId>
+       <version>1.0-SNAPSHOT</version>
+       <!--可选-->
+       <relativePath>../pom.xml</relativePath>
+   </parent>
+   这样就建立了子模块与父项目的继承关系。
+   然后再将子模块中的公共部分提取到父pom中，删除自己的，如：
+   <properties>
+       <java.version>1.8</java.version>
+       <!--这里的版本和spring boot的版本有对应关系-->
+       <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+   </properties>
+   <dependencies>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-test</artifactId>
+           <scope>test</scope>
+           <exclusions>
+               <exclusion>
+                   <groupId>org.junit.vintage</groupId>
+                   <artifactId>junit-vintage-engine</artifactId>
+               </exclusion>
+           </exclusions>
+       </dependency>
+   </dependencies>
+   <dependencyManagement>
+       <dependencies>
+           <dependency>
+               <groupId>org.springframework.cloud</groupId>
+               <artifactId>spring-cloud-dependencies</artifactId>
+               <version>${spring-cloud.version}</version>
+               <type>pom</type>
+               <scope>import</scope>
+           </dependency>
+       </dependencies>
+   </dependencyManagement>
+   <build>
+       <plugins>
+           <plugin>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-maven-plugin</artifactId>
+           </plugin>
+       </plugins>
+   </build>
+   <repositories>
+       <repository>
+           <id>spring-milestones</id>
+           <name>Spring Milestones</name>
+           <url>https://repo.spring.io/milestone</url>
+       </repository>
+   </repositories>
+   上面的部分都可以提取到父项目的pom.xml文件中，同时删除子模块中相同的。
+   eureka-server中有：
+   <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+   </dependency>
+
+   eureka-client中有:
+   <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+   </dependency>
+   另外在eureka-client客户端(服务提供者中) 还必须有：
+   <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-web</artifactId>
+   </dependency>
+   否则服务无法注册到eureka服务中心
+
+二、关于项目启动
+   SpringBoot的版本要个SpringCloud的版本对应，
+   按照SpringBoot的启动方式启动项目
+   启动时，先启动server，再启动client，
+   eureka-server启动类添加注解 @EnableEurekaServer
+   eureka-server启动类添加注解 @EnableEurekaClient
+   eureka-client 必须给一个spring.application.name
+   eureka-client 中的defaultZone必须是驼峰命名，其他的可以是-风格
+   eureka-client 的pom中，必须有spring-boot-starter-web依赖
+
+三、在IDEA中开启多个实例
+   eureka-client一个端口号可以注册一个服务，
+   在启动了eureka-client之后，修改配置文件的server.port，再启动(之前的不关闭)，这需要IDEA多实例的支持
+   具体设置：点击IDEA上方的 Edit Configurations,选择eureka-client项目，
+   然后选中右上角的Allow parallel run, 保存即可一个项目启动多个端口
+
