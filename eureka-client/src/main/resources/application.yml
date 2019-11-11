@@ -1,0 +1,9 @@
+server:
+  port: 8092
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8090/eureka/  #客户端这里必须是驼峰命名
+spring:
+  application:
+    name: eureka-client  #起个名字，用于注册到服务端
