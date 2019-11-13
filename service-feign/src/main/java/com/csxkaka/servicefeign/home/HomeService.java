@@ -9,7 +9,15 @@ import org.springframework.web.bind.annotation.RequestParam;
  * feign采用的是基于接口的注解
  * @FeignClient(value="eureka-client") 表示这个接口是访问eureka-client项目中的接口
  */
-@FeignClient(value = "eureka-client")
+
+/**
+ * feign中使用断路器hystrix ，feign是自带断路器的，所以不需要添加依赖
+ * 但在SpringCloud 的D版本后，断路器不会自动开启，需要在配置文件配置：
+ * feign.hystrix.enabled=true
+ * 在接口的注解里加上fallback的指定类，这个指定类实现本接口，并交给spring管理，
+ * 那么在接口请求失败后会执行其重写的方法
+ */
+@FeignClient(value = "eureka-client", fallback = HomeFallBack.class)
 public interface HomeService {
 
     /**

@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+@EnableHystrix  // 开启熔断器功能
 @EnableDiscoveryClient  // 支持多种注册中心，Eureka,Zookeeper,Consul
 @EnableEurekaClient     // 只支持Eureka注册中心
 @SpringBootApplication

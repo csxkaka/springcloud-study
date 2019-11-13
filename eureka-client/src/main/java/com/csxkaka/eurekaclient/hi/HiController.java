@@ -15,4 +15,9 @@ public class HiController {
     public String hi(@RequestParam(value = "name", defaultValue = "csxkaka") String name) {
         return "hi " + name + ", i am from " + port;
     }
+
+    @GetMapping(value = "/hi/hystrix")
+    public String hiHystrix(@RequestParam(value = "name", defaultValue = "csxkaka") String name) {
+        return "hi " + name + ", nice to meet you!" + port;
+    }
 }

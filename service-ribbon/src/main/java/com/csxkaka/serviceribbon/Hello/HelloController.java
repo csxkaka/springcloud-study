@@ -21,4 +21,9 @@ public class HelloController {
     public String hiEurekaClient(@RequestParam String name) {
         return helloService.hiEurekaClient(name);
     }
+
+    @GetMapping(value = "/hi/hystrix")
+    public String hiHystrix(@RequestParam String name) {
+        return helloService.hiHystrix(name);
+    }
 }
