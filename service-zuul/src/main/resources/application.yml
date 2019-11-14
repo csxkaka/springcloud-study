@@ -1,0 +1,19 @@
+server:
+  port: 8099
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8090/eureka/ #\u6307\u5411\u670D\u52A1\u6CE8\u518C\u4E2D\u5FC3s
+spring:
+  application:
+    name: service-zuul
+
+#zuul\u4F1A\u6839\u636E\u8BF7\u6C42\u5730\u5740\uFF0C\u8BBF\u95EE\u4E0D\u540C\u7684\u670D\u52A1\uFF0C\u901A\u8FC7serviceId\u6307\u5B9A\u5177\u4F53\u54EA\u4E2A\u670D\u52A1
+zuul:
+  routes:                           #\u8BBE\u5B9A\u8DEF\u7531
+    api-a:                          #\u8DEF\u75311\u540D\u79F0
+      path: /api-a/**               #\u8BF7\u6C42\u5730\u5740
+      serviceId: service-ribbon     #\u670D\u52A1\u540D
+    api-b:                          #\u8DEF\u75312\u540D\u79F0
+      path: /api-b/**               #\u8BF7\u6C42\u5730\u5740
+      serviceId: service-feign      #\u670D\u52A1\u540D
